@@ -14,7 +14,7 @@ none yet
 
 # Getting Started:
 
-(link to game here)
+[link to game here]   dont have it yet
 
 # Next Steps:
 
