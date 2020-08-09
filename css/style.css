@@ -1,4 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Helvetica;
+}
+
 h1 {
-    font-size: 90px;
-    color: red;
+    font-size: 75px;
+    text-align: center;
+}
+
+.table {
+    background-color: green;
 }
