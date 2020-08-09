@@ -21,11 +21,23 @@
 
 /*----- constants -----*/
 
+// will be the deck but not sure how to build with the css cards
 
 /*----- app's state (variables) -----*/
 
+let playerBalance;
+let playerHand;
+let dealerHand;
+let playerBet;
+
 
 /*----- cached element references -----*/
+
+const dealBtn = document.querySelector('#deal');
+const hitBtn = document.querySelector('#hit');
+const stayBtn = document.querySelector('#stay');
+const doubleBtn = document.querySelector('#double-down');
+// need to cache input for bet
 
 
 /*----- event listeners -----*/
@@ -33,4 +45,10 @@
 
 /*----- functions -----*/
 
-console.log('js is working');
+function init () {
+    playerBalance = 500;
+    playerHand = [];
+    dealerHand = [];
+
+    // render ();
+}
