@@ -5,7 +5,7 @@
 // deal two random cards to player and dealer
     // both face up for player and one face one face down for dealer
 // if player was dealt blackjack they win 1.5 of bet
-// player received message of currect total and dealers total and is asked to hit? or stay?
+// player received message of currect total and dealers total and is asked to hit? or stay? or double?
 // if hit 
     // player receives another card face up
         // player bust? lose bet and play again?
@@ -17,6 +17,11 @@
     // moves to dealer play
         // player recieves message win, lose, draw
         // player balance updated
+// if double down
+    // does player have enough money to double
+    // yes removed original bet amount again and add to bet amount
+    // player is dealt one and only more card from deck.
+    // game will then move into stay (dealer plays/ compares players and dealers hand/ msg win, lose, draw)
 // recieves message play again?
 
 /*----- constants -----*/
