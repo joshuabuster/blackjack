@@ -9,37 +9,39 @@
     <title>Blackjack Game</title>
 </head>
 <body>
-    <main>
-        <h1>Blackjack</h1>
-        <div class="table">
-            <div class="dealers-hand">Dealer's Hand:
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-            </div>
-            <div class="player-hand">Player's Hand:
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-            </div>
-            <div class="bottom-row">
-                <div Class="balance">Your Money Amount: $500</div>
+    <h1>Blackjack</h1>
+    <div class="table">
+        <div class="hand-label">Dealer's Hand:</div>
+        <div class="dealer-hand">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        <div class="hand-label">Player's Hand:</div>
+        <div class="player-hand">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        <div class="bottom-row">
+            <div class="balance">Your Money Amount: $500</div>
+            <div class="buttons">
                 <button id="deal">Deal</button>
                 <button id="hit">Hit</button>
                 <button id="stay">Stay</button>
                 <button id="double">Double Down</button>
-                <div class="bets">
-                    <input type="text" placeholder="Place Your Bets Here">
             </div>
-            </div>
+            <div class="bet">Bet:
+                <input type="text" placeholder="Place Your Bets Here">
         </div>
-        <div class="messages">You Win!</div>
-    </main>
+        </div>
+    </div>
+    <div class="messages">You Win!</div>
 </body>
 </html>

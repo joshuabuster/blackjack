@@ -54,6 +54,7 @@ function init () {
     playerBalance = 500;
     playerHand = [];
     dealerHand = [];
+    // playerBet = input from player
 
     // render ();
 }
