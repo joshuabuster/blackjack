@@ -36,7 +36,7 @@ const masterDeck = buildMasterDeck();
 
 /*----- app's state (variables) -----*/
 
-let playerBalance;
+let playerBalance = 500;
 let playerHand;
 let dealerHand;
 let playerBet;
@@ -74,10 +74,9 @@ playAgainBtn.addEventListener('click', function (e) {
 /*----- functions -----*/
 
 function init () {
-    playerBalance = 500;
     playerHand = [];
     dealerHand = [];
-    // playerBet = input from player
+
 
     // render ();
 }
@@ -108,4 +107,24 @@ function shuffleDeck() {
         shuffledDeck.push(tempDeck.splice(rndIdx, 1)[0]);
       }
     return shuffledDeck;
+}
+
+function deal() {
+    
+}
+
+function hit() {
+
+}
+
+function stay() {
+
+}
+
+function double() {
+
+}
+
+function playAgain() {
+
 }
