@@ -41,12 +41,27 @@ let playerBet;
 const dealBtn = document.querySelector('#deal');
 const hitBtn = document.querySelector('#hit');
 const stayBtn = document.querySelector('#stay');
-const doubleBtn = document.querySelector('#double-down');
+const doubleBtn = document.querySelector('#double');
+const playAgainBtn = document.querySelector('#play-again');
 // need to cache input for bet
 
 
 /*----- event listeners -----*/
-
+dealBtn.addEventListener('click', function (e) {
+    console.log('deal');
+});
+hitBtn.addEventListener('click', function (e) {
+    console.log('hit');
+});
+stayBtn.addEventListener('click', function (e) {
+    console.log('stay');
+});
+doubleBtn.addEventListener('click', function (e) {
+    console.log('double');
+});
+playAgainBtn.addEventListener('click', function (e) {
+    console.log('play again');
+});
 
 /*----- functions -----*/
 
