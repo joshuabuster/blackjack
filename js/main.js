@@ -37,6 +37,8 @@ const masterDeck = buildMasterDeck();
 /*----- app's state (variables) -----*/
 
 let playerBalance = 500;
+let playerHandTotal;
+let dealerHandTotal;
 let playerHand;
 let dealerHand;
 let playerBet;
@@ -50,15 +52,16 @@ const hitBtn = document.querySelector('#hit');
 const stayBtn = document.querySelector('#stay');
 const doubleBtn = document.querySelector('#double');
 const playAgainBtn = document.querySelector('#play-again');
+// const dealerHandEl = document.querySelector()
 // need to cache input for bet
 
 
 /*----- event listeners -----*/
 dealBtn.addEventListener('click', function (e) {
-    console.log('deal');
+    deal();
 });
 hitBtn.addEventListener('click', function (e) {
-    console.log('hit');
+    hit();
 });
 stayBtn.addEventListener('click', function (e) {
     console.log('stay');
@@ -76,8 +79,8 @@ playAgainBtn.addEventListener('click', function (e) {
 function init () {
     playerHand = [];
     dealerHand = [];
-
-
+    buildMasterDeck();
+    shuffleDeck();
     // render ();
 }
 
@@ -110,21 +113,67 @@ function shuffleDeck() {
 }
 
 function deal() {
-    
+    dealPlayerCard();
+    dealDealerCard();
+    dealPlayerCard();
+    dealDealerCard();
+    getHandTotals();
+    // if (playerHandTotal === 21){
+    //     // renderMessage.blackjack;
+    // } else {
+    //     //renderMessage.currentTotals;
+    // }
+}
+
+function dealPlayerCard() {
+    playerHand.push(shuffledDeck.pop());
+}
+
+function dealDealerCard() {
+    dealerHand.push(shuffledDeck.pop());
 }
 
 function hit() {
+    if(playerHandTotal <= 21) {
+        dealPlayerCard();
+    }
+    getHandTotals();
+}
+
+// function stay() {
+//     dealerPlay();
+// }
+
+// function double() {
+//     if(playerHand.length === 2 && playerBalance >= bet * 2) {
+//         bet = bet * 2;
+//         dealPlayerCard();
+//     } else return;
+
+function getHandTotals () {
+    playerHandTotal = playerHand[0].value + playerHand[1].value;
+    for (let i = 2; i < playerHand.length; i++) {
+        playerHandTotal += playerHand[i].value;
+    }
+
+    dealerHandTotal = dealerHand[0].value + dealerHand[1].value;
+    for (let i = 2; i < dealerHand.length; i++) {
+        dealerHandTotal += dealerHand[i].value;
+    }
 
 }
 
-function stay() {
+// function dealerPlay() {
 
-}
+// }
 
-function double() {
+// function playAgain() {
 
-}
+// }
 
-function playAgain() {
+// function render() {
 
-}
+// }
+
+init()
+

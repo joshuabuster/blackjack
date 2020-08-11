@@ -15,7 +15,8 @@ h1 {
 .table {
     background-color: green;
     display: grid;
-
+    margin-left: 100px;
+    margin-right: 100px;
 }
 
 .hand-label {
