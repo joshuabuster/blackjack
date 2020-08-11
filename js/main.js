@@ -52,11 +52,17 @@ const hitBtn = document.querySelector('#hit');
 const stayBtn = document.querySelector('#stay');
 const doubleBtn = document.querySelector('#double');
 const playAgainBtn = document.querySelector('#play-again');
-// const dealerHandEl = document.querySelector()
+const betInput = document.querySelector('input');
+// const dealerHandEl = document.querySelector();
+// const PlayerHandEl = document.querySelctor();
 // need to cache input for bet
 
 
 /*----- event listeners -----*/
+
+betInput.addEventListener('input', function (e) {
+    playerBet = parseInt(e.target.value);
+})
 dealBtn.addEventListener('click', function (e) {
     deal();
 });
@@ -113,6 +119,10 @@ function shuffleDeck() {
 }
 
 function deal() {
+    // udate playerBalance first and return if bet is too high
+    if(playerBalance >= playerBet){
+        playerBalance -= playerBet;
+    } else return;
     dealPlayerCard();
     dealDealerCard();
     dealPlayerCard();
@@ -144,11 +154,12 @@ function hit() {
 //     dealerPlay();
 // }
 
-// function double() {
-//     if(playerHand.length === 2 && playerBalance >= bet * 2) {
-//         bet = bet * 2;
-//         dealPlayerCard();
-//     } else return;
+function double() {
+    if(playerHand.length === 2 && playerBalance >= bet * 2) {
+        bet = bet * 2;
+        dealPlayerCard();
+    } else return;
+}
 
 function getHandTotals () {
     playerHandTotal = playerHand[0].value + playerHand[1].value;
