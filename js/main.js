@@ -55,7 +55,7 @@ const playAgainBtn = document.querySelector('#play-again');
 const betInput = document.querySelector('input');
 // const dealerHandEl = document.querySelector();
 // const PlayerHandEl = document.querySelctor();
-// need to cache input for bet
+
 
 
 /*----- event listeners -----*/
@@ -73,7 +73,7 @@ stayBtn.addEventListener('click', function (e) {
     console.log('stay');
 });
 doubleBtn.addEventListener('click', function (e) {
-    console.log('double');
+    double();
 });
 playAgainBtn.addEventListener('click', function (e) {
     console.log('play again');
@@ -129,9 +129,9 @@ function deal() {
     dealDealerCard();
     getHandTotals();
     // if (playerHandTotal === 21){
-    //     // renderMessage.blackjack;
+    //     // render message for blackjack;
     // } else {
-    //     //renderMessage.currentTotals;
+    //     //render message for current totals for both dealer and player;
     // }
 }
 
@@ -152,12 +152,18 @@ function hit() {
 
 // function stay() {
 //     dealerPlay();
+//     getHandTotal();
+//     // render message of both hand totals
+//     // render message win, lose or push
+//     // render button to be visible for play again?
 // }
 
 function double() {
-    if(playerHand.length === 2 && playerBalance >= bet * 2) {
-        bet = bet * 2;
+    if(playerHand.length === 2 && playerBalance >= playerBet * 2) {
+        playerBalance -= playerBet;
+        playerBet = playerBet * 2;
         dealPlayerCard();
+        getHandTotals();
     } else return;
 }
 
@@ -171,7 +177,6 @@ function getHandTotals () {
     for (let i = 2; i < dealerHand.length; i++) {
         dealerHandTotal += dealerHand[i].value;
     }
-
 }
 
 // function dealerPlay() {
