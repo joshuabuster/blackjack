@@ -43,6 +43,8 @@ let playerHand;
 let dealerHand;
 let playerBet;
 let shuffledDeck;
+let wasDoubled;
+let dealerPlayed;
 
 
 /*----- cached element references -----*/
@@ -64,15 +66,19 @@ betInput.addEventListener('input', function (e) {
     playerBet = parseInt(e.target.value);
 })
 dealBtn.addEventListener('click', function (e) {
+    console.log('deal');
     deal();
 });
 hitBtn.addEventListener('click', function (e) {
+    console.log('hit');
     hit();
 });
 stayBtn.addEventListener('click', function (e) {
     console.log('stay');
+    stay();
 });
 doubleBtn.addEventListener('click', function (e) {
+    console.log('double');
     double();
 });
 playAgainBtn.addEventListener('click', function (e) {
@@ -85,6 +91,10 @@ playAgainBtn.addEventListener('click', function (e) {
 function init () {
     playerHand = [];
     dealerHand = [];
+    playerBet = 0;
+    dealerPlayed = false;
+    wasDoubled = false;
+    // will rebuilt and reshuffle every hand so i can only use one deck to prevent against card counting 
     buildMasterDeck();
     shuffleDeck();
     // render ();
@@ -98,7 +108,8 @@ function buildMasterDeck() {
         deck.push({
           // The 'face' property maps to the library's CSS classes for cards
           face: `${suit}${rank}`,
-          // Setting the 'value' property for A in game of blackjack
+          // Setting the 'value' property for A in game of blackjack 
+          // will change A to 1 later if needed for player hand
           value: Number(rank) || (rank === 'A' ? 11 : 10)
         });
       });
@@ -144,27 +155,32 @@ function dealDealerCard() {
 }
 
 function hit() {
-    if(playerHandTotal <= 21) {
+    if(wasDoubled === true) {
+        return;
+    } else if(playerHandTotal <= 21) {
         dealPlayerCard();
     }
     getHandTotals();
 }
 
-// function stay() {
-//     dealerPlay();
-//     getHandTotal();
-//     // render message of both hand totals
-//     // render message win, lose or push
-//     // render button to be visible for play again?
-// }
+function stay() {
+    dealerPlay();
+    getHandTotals();
+}
 
 function double() {
-    if(playerHand.length === 2 && playerBalance >= playerBet * 2) {
+    if(wasDoubled === true) {
+        return;
+    } else if(playerHand.length === 2 && playerBalance >= playerBet * 2) {
         playerBalance -= playerBet;
         playerBet = playerBet * 2;
         dealPlayerCard();
         getHandTotals();
-    } else return;
+        // dealerPlay();
+    } else {
+        wasDoubled = true;
+        return;
+    }
 }
 
 function getHandTotals () {
@@ -172,16 +188,63 @@ function getHandTotals () {
     for (let i = 2; i < playerHand.length; i++) {
         playerHandTotal += playerHand[i].value;
     }
+    console.log('players current total: ', playerHandTotal);
+    console.log('ph: ', playerHand);
+    console.log('players balance: ', playerBalance);
+    console.log('players bet: ', playerBet)
 
     dealerHandTotal = dealerHand[0].value + dealerHand[1].value;
     for (let i = 2; i < dealerHand.length; i++) {
         dealerHandTotal += dealerHand[i].value;
     }
+    console.log('dealers current total: ', dealerHandTotal);
+    console.log('hd: ', dealerHand)
+    compare();
+}   
+
+function compare () {
+    if (playerHandTotal > 21) {
+        console.log('you lose');
+        // render lose message
+        init();
+    }
+
+    if(dealerHandTotal === playerHandTotal && dealerHandTotal >= 17) {
+        console.log('push');
+        // render push message
+        init();
+    }
+    if (dealerHandTotal > playerHandTotal && dealerHandTotal >= 17 && dealerHandTotal <= 21) {
+        console.log('dealer has higher total without busting, you lose');
+        // render lose message
+        init()
+    }
+
+    if (dealerPlayed === true && playerHandTotal > dealerHandTotal) {
+        playerBalance += playerBet * 2;
+        console.log('you win!'); 
+        // render winning message
+        init();
+    }
 }
 
-// function dealerPlay() {
-
-// }
+function dealerPlay() {
+    dealerPlayed = true;
+    // render face down to face up
+    while (dealerHandTotal <= 17) {
+        dealDealerCard();
+        // render cards drawn for dealer as they come
+        getHandTotals();
+        if(dealerHandTotal > 21) {
+            playerBalance += playerBet * 2;
+            console.log('dealer bust, you win');
+            //render win message
+            init()
+            break;
+        }
+    }
+    
+}
 
 // function playAgain() {
 
