@@ -156,8 +156,9 @@ function deal() {
     // one card for the dealer should be face down
     dealDealerCard();
     getHandTotals();
-    compare();
+    // compareForAce();
     betInput.value = '';
+    render();
 }
 
 function dealPlayerCard() {
@@ -175,7 +176,7 @@ function hit() {
         dealPlayerCard();
     }
     getHandTotals();
-    compare();
+    // compareForAce();
 }
 
 function stay() {
@@ -217,16 +218,16 @@ function getHandTotals () {
     console.log('dealers hand: ', dealerHand)
 }   
 
-function compare() {
-    // compares totals and adjusts for Aces
-    if(dealerHandTotal === 21 || playerHandTotal === 21) {
-        winner = true;
-    }
-    if (dealerPlayed === true) {
-        winner === true;
-    }
-    render();
-}
+// function compareForAce() {
+//     // compares totals and adjusts for Aces
+//     if(dealerHandTotal === 21 || playerHandTotal === 21) {
+//         winner = true;
+//     }
+//     if (dealerPlayed === true) {
+//         winner === true;
+//     }
+//     render();
+// }
 
 function dealerPlay() {
     // the card that is face down should flip face up
@@ -235,7 +236,7 @@ function dealerPlay() {
         dealDealerCard();
         // render cards drawn for dealer as they come
         getHandTotals();
-        compare()
+        // compareForAce()
         if(dealerHandTotal > 21) {
             playerBalance += playerBet * 2;
             console.log('dealer bust, you win');
@@ -250,9 +251,6 @@ function render() {
     // renderHands();
     renderBalance();
     renderMessage();
-    if (playerBalance === 0 && winner === true) {
-        renderPlayAgainBtn();
-    } else return;
 }
 
 // function renderHands() {
@@ -263,10 +261,6 @@ function render() {
 function renderBalance() {
     balance.innerHTML = `Your Money Amount: $${playerBalance}`;
 }
-    
-    // function renderMessage() {
-        //      // might change compare() to renderMessage()       
-        // }
         
 function playAgain() {
     playerBalance = 500;
@@ -322,8 +316,8 @@ function renderMessage () {
         message.innerHTML = 'Dealer Bust! You Win!';
         init();
     }
+    // need to figure how to account for true game over
     if (playerBalance === 0) {
-        message.innerHTML = "Sorry, You're Out Of Money."
         renderPlayAgainBtn();
     }
 }
