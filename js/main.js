@@ -36,6 +36,8 @@ const masterDeck = buildMasterDeck();
 
 /*----- app's state (variables) -----*/
 
+// could use object to hold players info?
+// could use object to hold dealers info?
 let playerBalance = 500;
 let playerHandTotal;
 let dealerHandTotal;
@@ -45,6 +47,7 @@ let playerBet;
 let shuffledDeck;
 let wasDoubled;
 let dealerPlayed;
+let stand;
 
 
 /*----- cached element references -----*/
@@ -56,7 +59,7 @@ const doubleBtn = document.querySelector('#double');
 const playAgainBtn = document.querySelector('#play-again');
 const betInput = document.querySelector('input');
 // const dealerHandEl = document.querySelector();
-// const PlayerHandEl = document.querySelctor();
+// const playerHandEl = document.querySelctor();
 
 
 
@@ -64,8 +67,10 @@ const betInput = document.querySelector('input');
 
 betInput.addEventListener('input', function (e) {
     playerBet = parseInt(e.target.value);
+    // once bet input received and deal button clicked clear bet amout from window
 })
 dealBtn.addEventListener('click', function (e) {
+    // once bet input received and deal button clicked clear bet amout from window
     console.log('deal');
     deal();
 });
@@ -139,6 +144,8 @@ function deal() {
     dealPlayerCard();
     dealDealerCard();
     getHandTotals();
+    compare();
+    // logic for player backjack goes here
     // if (playerHandTotal === 21){
     //     // render message for blackjack;
     // } else {
@@ -161,11 +168,13 @@ function hit() {
         dealPlayerCard();
     }
     getHandTotals();
+    compare();
 }
 
 function stay() {
-    dealerPlay();
+    stand = true;
     getHandTotals();
+    dealerPlay();
 }
 
 function double() {
@@ -176,7 +185,7 @@ function double() {
         playerBet = playerBet * 2;
         dealPlayerCard();
         getHandTotals();
-        // dealerPlay();
+        dealerPlay();
     } else {
         wasDoubled = true;
         return;
@@ -189,7 +198,7 @@ function getHandTotals () {
         playerHandTotal += playerHand[i].value;
     }
     console.log('players current total: ', playerHandTotal);
-    console.log('ph: ', playerHand);
+    console.log('pplayer hand: ', playerHand);
     console.log('players balance: ', playerBalance);
     console.log('players bet: ', playerBet)
 
@@ -198,8 +207,7 @@ function getHandTotals () {
         dealerHandTotal += dealerHand[i].value;
     }
     console.log('dealers current total: ', dealerHandTotal);
-    console.log('hd: ', dealerHand)
-    compare();
+    console.log('dealers hand: ', dealerHand)
 }   
 
 function compare () {
@@ -208,42 +216,49 @@ function compare () {
         // render lose message
         init();
     }
-
-    if(dealerHandTotal === playerHandTotal && dealerHandTotal >= 17) {
+    if (stand === true && dealerHandTotal === playerHandTotal && dealerHandTotal >= 17) {
         console.log('push');
         // render push message
         init();
     }
-    if (dealerHandTotal > playerHandTotal && dealerHandTotal >= 17 && dealerHandTotal <= 21) {
-        console.log('dealer has higher total without busting, you lose');
+    if (stand === true && dealerHandTotal > playerHandTotal && dealerHandTotal >= 17 && dealerHandTotal <= 21) {
+        console.log('dealer has higher total without busting or has blackjack, you lose');
         // render lose message
-        init()
+        init();
     }
-
-    if (dealerPlayed === true && playerHandTotal > dealerHandTotal) {
+    if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
         playerBalance += playerBet * 2;
         console.log('you win!'); 
         // render winning message
         init();
     }
+    if (stand === true && dealerHandTotal > 21) {
+        playerBalance += playerBet * 2;
+        console.log('dealer bust, you win');
+            // render win message
+            init();
+    }
 }
 
 function dealerPlay() {
     dealerPlayed = true;
-    // render face down to face up
+    // render one card face down and one face up
     while (dealerHandTotal <= 17) {
         dealDealerCard();
+        // render card that is face down to be face up
         // render cards drawn for dealer as they come
         getHandTotals();
         if(dealerHandTotal > 21) {
             playerBalance += playerBet * 2;
             console.log('dealer bust, you win');
             //render win message
-            init()
+            // invoke init here?
             break;
         }
     }
     
+    getHandTotals();
+    compare();
 }
 
 // function playAgain() {
