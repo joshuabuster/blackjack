@@ -31,8 +31,7 @@ const masterDeck = buildMasterDeck();
 
 /*----- app's state (variables) -----*/
 
-// could use object to hold players info?
-// could use object to hold dealers info?
+// could use objects to hold player/dealer info?
 let playerBalance = 500;
 let playerHandTotal;
 let dealerHandTotal;
@@ -85,14 +84,13 @@ function init () {
     playerHandTotal = 0;
     dealerHandTotal = 0;
     playerHasAce = false;
-    dealerHandTotal = false;
+    dealerHasAce = false;
     playerBet = 0;
     dealerPlayed = false;
-    wasDoubled = false;
     dealt = false;
     stand = false;
     betInput.value = '';
-    // will rebuilt and reshuffle every hand so I can only use one deck to prevent against card counting 
+    message.innerHTML = '';
     buildMasterDeck();
     shuffleDeck();
     render ();
@@ -121,7 +119,8 @@ function shuffleDeck() {
     while (tempDeck.length) {
         // Get a random index for a card still in the tempDeck
         const rndIdx = Math.floor(Math.random() * tempDeck.length);
-        // Note the [0] after splice - this is because splice always returns an array and we just want the card object in that array
+        // Note the [0] after splice - this is because splice always returns an array
+        // and we just want the card object in that array
         shuffledDeck.push(tempDeck.splice(rndIdx, 1)[0]);
       }
     return shuffledDeck;
@@ -129,7 +128,6 @@ function shuffleDeck() {
 
 function deal() {
     if (dealt === true) return;
-    // udate playerBalance first and return if bet is too high
     if(playerBalance >= playerBet){
         playerBalance -= playerBet;
     } else return;
@@ -139,8 +137,6 @@ function deal() {
     dealDealerCard();
     dealPlayerCard();
     dealDealerCard();
-    // ================== TO DO: LAST CARD DEALT TO DEALER NEED TO BE FACE DOWN AT FIRST =====================
-    // one card for the dealer should be face down
     playerHandTotal = playerHand[0].value + playerHand[1].value;
     dealerHandTotal = dealerHand[0].value + dealerHand[1].value;
     message.innerHTML = '';
@@ -161,7 +157,6 @@ function hit() {
     }
     getHandTotals();
     render();
-    // compareForAce();
 }
 
 function stay() {
@@ -170,7 +165,6 @@ function stay() {
 }
 
 function getHandTotals () {
-    
     playerHandTotal = 0;
     dealerHandTotal = 0;
     for (let i = 0; i < playerHand.length; i++) {
@@ -188,7 +182,7 @@ function getHandTotals () {
 }   
 
 function compareForAce() {
-    // =============== TO DO: NOT WORKING YET =============
+    // ========================== TO DO: NOT WORKING YET ======================
     // need to check for A in player/dealer hands -- try includes? --
     // if ace is present and total is higher than 21 the Ace value needs to reset to 1
     for (let i = 0; i < dealerHand.length; i++) {
@@ -197,7 +191,6 @@ function compareForAce() {
         } else {
             dealerHasAce = false
         }
-        console.log(dealerHasAce);
     }
     for (let i = 0; i < playerHand.length; i++) {
         if (playerHand[i].value === 11) {
@@ -205,7 +198,6 @@ function compareForAce() {
         } else {
             playerHasAce = false
         }
-        console.log(playerHasAce);
     }   
     if (playerHandTotal > 21 && playerHasAce === true) {
         playerHandTotal = playerHandTotal - 10;
@@ -216,55 +208,42 @@ function compareForAce() {
 }
 
 function dealerPlay() {
-    // the card that is face down should flip face up
     dealerPlayed = true;
     while (dealerHandTotal <= 17) {
         dealDealerCard();
-        // render cards drawn for dealer as they come
         getHandTotals();
-        render();
         if (dealerHandTotal > 21) {
             playerBalance = playerBalance + (playerBet * 2);
         }
     }
     render();
 }
-
+// ================================ TO DO: CHECK MATH ============================
 function updateBalance() {
     if (playerHand.length === 2 && playerHandTotal === 21) {
         playerBalance = playerBalance + (playerBet * 1.5);
-        // for player blackjack
+        // for win, player got blackjack
     }
     if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
         playerBalance = playerBalance + (playerBet * 2);
-        // for player total higher than dealers
+        // for win, the player total higher than dealers
     }
     if (stand === true && dealerHandTotal > 21) {
         playerBalance = playerBalance + (playerBet * 2);
-        // for dealer bust
+        // for win, dealer bust
     }
     if (stand === true && dealerHandTotal === playerHandTotal && dealerHandTotal >= 17)
         playerBalance = playerBalance + playerBet;
-        console.log('bet: ', playerBet);
-        console.log('balance: ', playerBalance);
         // for push
 }
 
 function render() {
-   console.log('dealer played: ', dealerPlayed);
     renderHands();
     renderBalance();
     renderMessage();
 }
 
-//======================= TO DO: RENDER CARDS TO HAND ================================
 function renderHands() {
-    // removed element?
-    // let cards = document.getElementsByClassName('card')
-    // playerHandEl.removeChild(cards); 
-    // playerCardDiv.remove();
-    // document.getElementsByClassName('player-hand').innerHTML = "";
-    // document.getElementsByClassName('dealer-hand').innerHTML = "";
     playerHandEl.innerHTML = "";
     dealerHandEl.innerHTML = "";
     for (let i = 0; i < playerHand.length; i++) {
@@ -283,11 +262,13 @@ function renderHands() {
         }
     }
 }
+
 function reset() {
     init();
 }
     
 function renderBalance() {
+    updateBalance();
     balance.innerHTML = `Your Money Amount: $${playerBalance}`;
 }
         
@@ -305,37 +286,19 @@ function renderMessage () {
     if (playerBalance === 0 && dealerPlayed === true) {
         renderPlayAgainBtn();
     }else if (dealt === true && dealerPlayed === false && playerHandTotal < 21) {
-        console.log('game in progress');
-        message.innerHTML = `Players Current Total Is ${playerHandTotal} And The Dealer Is Currently Showing ${dealerHand[0].value}`; // figure out how to calcuate for only the showing card
+        message.innerHTML = `Players Current Total Is ${playerHandTotal} And The Dealer Is Currently Showing ${dealerHand[0].value}`;
     } else if (playerHandTotal > 21) {
-        console.log('you bust/lose');
         message.innerHTML = `Your Total Equals ${playerHandTotal}. You Bust. Sorry You Lose.`;
-        // reset function
     } else if (stand === true && dealerHandTotal === playerHandTotal && dealerHandTotal >= 17) {
-        console.log('push');
         message.innerHTML = `Both Player And Dealer Had ${playerHandTotal}. It's A Push`;
-        updateBalance();
-        // reset function
     } else if (playerHand.length === 2 && playerHandTotal === 21) {
-        console.log('Blackjack!');
         message.innerHTML = 'Blackjack!';
-        updateBalance();
-        // reset function
     }  else if (stand === true && dealerHandTotal > playerHandTotal && dealerHandTotal >= 17 && dealerHandTotal <= 21) {
-        console.log('dealer has higher total without busting or has blackjack, you lose');
         message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. Sorry, You Lose.`;
-        // reset fucntion
-        // player balance should be alread correct
     } else if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
-        console.log('you win!'); 
         message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. You Win!`;
-        updateBalance();
-        // reset function
     } else if (dealerHandTotal > 21 && stand === true) {
-        console.log('dealer bust, you win');
-        message.innerHTML = `Player's Total Was ${playerHandTotal}. Dealer's Total Was ${dealerHandTotal}. Dealer Bust. You Win!`;
-        updateBalance();  
-        // reset function
+        message.innerHTML = `Player's Total Was ${playerHandTotal}. Dealer's Total Was ${dealerHandTotal}. Dealer Bust. You Win!`; 
     } 
 }
         
