@@ -83,9 +83,9 @@ function init () {
     dealerHand = [];
     playerHandTotal = 0;
     dealerHandTotal = 0;
+    playerBet = 0;
     playerHasAce = false;
     dealerHasAce = false;
-    playerBet = 0;
     dealerPlayed = false;
     dealt = false;
     stand = false;
@@ -170,14 +170,9 @@ function getHandTotals () {
     for (let i = 0; i < playerHand.length; i++) {
         playerHandTotal += playerHand[i].value;
     }
-    console.log('players current total: ', playerHandTotal);
-    console.log('player hand: ', playerHand);
-
     for (let i = 0; i < dealerHand.length; i++) {
         dealerHandTotal += dealerHand[i].value;
     }
-    console.log('dealers current total: ', dealerHandTotal);
-    console.log('dealers hand: ', dealerHand)
     compareForAce();
 }   
 
@@ -212,28 +207,29 @@ function dealerPlay() {
     while (dealerHandTotal <= 17) {
         dealDealerCard();
         getHandTotals();
-        if (dealerHandTotal > 21) {
-            playerBalance = playerBalance + (playerBet * 2);
-        }
     }
     render();
 }
-// ================================ TO DO: CHECK MATH ============================
+
 function updateBalance() {
+    let bj = playerBet * 1.5;
+    let bjWin = bj + playerBet;
+    let win = playerBet * 2;
+
     if (playerHand.length === 2 && playerHandTotal === 21) {
-        playerBalance = playerBalance + (playerBet * 1.5);
+        playerBalance += bjWin;
         // for win, player got blackjack
     }
     if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
-        playerBalance = playerBalance + (playerBet * 2);
+        playerBalance += win;
         // for win, the player total higher than dealers
     }
     if (stand === true && dealerHandTotal > 21) {
-        playerBalance = playerBalance + (playerBet * 2);
+        playerBalance += win;
         // for win, dealer bust
     }
     if (stand === true && dealerHandTotal === playerHandTotal && dealerHandTotal >= 17)
-        playerBalance = playerBalance + playerBet;
+        playerBalance += playerBet;
         // for push
 }
 
@@ -269,6 +265,7 @@ function reset() {
     
 function renderBalance() {
     updateBalance();
+    balance.innerHTML = '';
     balance.innerHTML = `Your Money Amount: $${playerBalance}`;
 }
         
