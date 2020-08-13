@@ -25,11 +25,10 @@ Basic Rules :
 * If you are dealt 21 from the start (Ace & 10), you got a blackjack.
 * Blackjack means you win 1.5 the amount of your bet.
 * Dealer will hit until his/her cards total 17 or higher.
-* Double Down is like a hit, only the bet is doubled and you only get one more card. 
-* Double Down can only happen on the first move.
 
 # Next Steps:
 
+* Add double down feature
 * Add a split feature
 * Add animations for dealing cards
 * Add sound effects for bust or being dealt blackjack

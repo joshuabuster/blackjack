@@ -29,11 +29,13 @@ h1 {
 .dealer-hand {
     display: flex;
     justify-content: center;
+    height: 250px;
 }
 
 .player-hand {
     display: flex;
     justify-content: center;
+    height: 250px;
 }
 
 .bottom-row {
