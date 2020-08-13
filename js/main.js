@@ -98,19 +98,21 @@ playAgainBtn.addEventListener('click', function (e) {
 
 /*----- functions -----*/
 
-function init () {
+function miniInit() {
     playerHand = [];
     dealerHand = [];
     playerBet = 0;
     dealerPlayed = false;
     wasDoubled = false;
-    winner = false;
     dealt = false;
     stand = false;
-    // will rebuilt and reshuffle every hand so i can only use one deck to prevent against card counting 
+    betInput.value = '';
+}
+function init () {
+    miniInit();
+    // will rebuilt and reshuffle every hand so I can only use one deck to prevent against card counting 
     buildMasterDeck();
     shuffleDeck();
-    // message.innerHTML = '';
     render ();
 }
 
@@ -154,11 +156,9 @@ function deal() {
     dealPlayerCard();
     dealDealerCard();
     dealPlayerCard();
-    // one card for the dealer should be face down
     dealDealerCard();
+    // one card for the dealer should be face down
     getHandTotals();
-    // compareForAce();
-    betInput.value = '';
     render();
 }
 
@@ -215,12 +215,30 @@ function getHandTotals () {
     }
     console.log('dealers current total: ', dealerHandTotal);
     console.log('dealers hand: ', dealerHand)
+    // compareForAce();
 }   
 
+// ================= TO DO: ACCOUNT FOR THE ACES ============================
 // function compareForAce() {
-//     // need to check for A in player/dealer hands  includes?
+//     // need to check for A in player/dealer hands -- try includes? --
 //     // if ace is present and total is higher than 21 the Ace value needs to reset to 1
+//     let dealerHasAce;
+//     for (let i = 0; i < dealerHand.length; i++) {
+//         if (dealerHand[i].value === 11) {
+//             dealerHasAce = true;
+//         } else dealerHasAce = false;
+//     let playerHasAce;
+//     for (let i = 0; i < playerHand.length; i++) {
+//         if (playerHand[i].value === 11) {
+//             playerHasAce = true;
+//         } else playerHasAce = false;
 
+//     if (playerHandTotal > 21 && playerHasAce === true) {
+//         playerHandTotal = playerHandTotal - 10;
+//     }
+//     if (dealerHandTotal > 21 && dealerHasAce === true) {
+//         dealerHandTotal = dealerHandTotal - 10;
+//     }
 // }
 
 function dealerPlay() {
@@ -230,8 +248,7 @@ function dealerPlay() {
         dealDealerCard();
         // render cards drawn for dealer as they come
         getHandTotals();
-        // compareForAce()
-        if(dealerHandTotal > 21) {
+        if (dealerHandTotal > 21) {
             playerBalance += playerBet * 2;
         }
     }
@@ -259,6 +276,7 @@ function render() {
     renderMessage();
 }
 
+//======================= TO DO: RENDER CARDS TO HAND ================================
 // function renderHands() {
 //     for (let i = 2; i < playerHand.length; i++) {
 //         playerHandEl.appendChild(playerHand[i].face);
@@ -283,7 +301,7 @@ function renderPlayAgainBtn() {
 }
         
 function renderMessage () {
-    if (winner === false && dealt === true && dealerPlayed === false) {
+    if (dealt === true && dealerPlayed === false) {
         console.log('game in progress');
         message.innerHTML = `Players Current Total Is ${playerHandTotal} And The Dealer Is Currently Showing ${dealerHand[0].value}`; // figure out how to calcuate for only the showing card
     } 
@@ -310,7 +328,7 @@ function renderMessage () {
         message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. You Win!`;
         updateBalance();
     }
-    if (stand === true && dealerHandTotal > 21) {
+    if (dealerHandTotal > 21 && stand === true || wasDoubled === true) {
         console.log('dealer bust, you win');
         message.innerHTML = 'Dealer Bust! You Win!';
         updateBalance();  
@@ -319,6 +337,7 @@ function renderMessage () {
     if (playerBalance === 0 && dealerPlayed === true) {
         renderPlayAgainBtn();
     }
+    miniInit();
 }
         
 init();
