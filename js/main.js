@@ -70,8 +70,10 @@ betInput.addEventListener('input', function (e) {
 dealBtn.addEventListener('click', deal);
 hitBtn.addEventListener('click', hit);
 stayBtn.addEventListener('click', stay);
-playAgainBtn.addEventListener('click', playAgain);
-
+playAgainBtn.addEventListener('click', function (e) {
+    playAgain();
+    playAgainBtn.style.visibility = 'hidden';
+});
 
 /*----- functions -----*/
 
@@ -244,19 +246,22 @@ function updateBalance() {
 }
 
 function render() {
+    renderHands();
     renderBalance();
     renderMessage();
-    renderHands();
 }
 
 //======================= TO DO: RENDER CARDS TO HAND ================================
 function renderHands() {
-
+    // removed element?
+    // let allCards = document.getElementsByClassName('card');
+    // allCards.playerHand.removeChildren(); 
     for (let i = 0; i < playerHand.length; i++) {
         let playerCardDiv = document.createElement(`div`);
         playerHandEl.appendChild(playerCardDiv);
         playerCardDiv.className = `card ${playerHand[i].face}`;
     }
+
     for (let i = 0; i < dealerHand.length; i++) {
         let dealerCardDiv = document.createElement('div');
         dealerHandEl.appendChild(dealerCardDiv);
