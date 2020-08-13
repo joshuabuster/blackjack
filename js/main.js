@@ -151,9 +151,7 @@ function dealDealerCard() {
 }
 
 function hit() {
-    if(wasDoubled === true) {
-        return;
-    } else if(playerHandTotal <= 21) {
+    if(playerHandTotal <= 21) {
         dealPlayerCard();
     }
     getHandTotals();
@@ -165,22 +163,6 @@ function stay() {
     stand = true;
     dealerPlay();
 }
-
-// ====================== TO DO: DOUBLE DOWN FEATURE IF THERE IS TIME =============================
-// function double() {
-//     if(wasDoubled === true) {
-//         return;
-//     } else if(playerHand.length === 2 && playerBalance >= playerBet * 2) {
-//         playerBalance -= playerBet;
-//         playerBet = playerBet * 2;
-//         dealPlayerCard();
-//         getHandTotals();
-//         dealerPlay();
-//     } else {
-//         wasDoubled = true;
-//         return;
-//     }
-// }
 
 function getHandTotals () {
     
@@ -233,6 +215,7 @@ function dealerPlay() {
         dealDealerCard();
         // render cards drawn for dealer as they come
         getHandTotals();
+        render();
         if (dealerHandTotal > 21) {
             playerBalance = playerBalance + (playerBet * 2);
         }
@@ -268,17 +251,16 @@ function render() {
 
 //======================= TO DO: RENDER CARDS TO HAND ================================
 function renderHands() {
+
     for (let i = 0; i < playerHand.length; i++) {
         let playerCardDiv = document.createElement(`div`);
         playerHandEl.appendChild(playerCardDiv);
-        playerCardDiv.className = `.card ${playerHand[i].face}`;
-        console.log(playerCardDiv);
+        playerCardDiv.className = `card ${playerHand[i].face}`;
     }
     for (let i = 0; i < dealerHand.length; i++) {
         let dealerCardDiv = document.createElement('div');
         dealerHandEl.appendChild(dealerCardDiv);
-        dealerCardDiv.className = `.card ${dealerHand[i].face}`;
-        console.log(dealerCardDiv);
+        dealerCardDiv.className = `card ${dealerHand[i].face}`;
     }
 }
     
