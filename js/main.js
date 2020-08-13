@@ -59,6 +59,7 @@ const message = document.querySelector('.messages');
 const balance = document.querySelector('.balance');
 const dealerHandEl = document.querySelector('.dealer-hand');
 const playerHandEl = document.querySelector('.player-hand');
+const resetBtn = document.querySelector('#reset');
 
 
 
@@ -68,6 +69,7 @@ betInput.addEventListener('input', function (e) {
     playerBet = parseInt(e.target.value);
 })
 dealBtn.addEventListener('click', deal);
+resetBtn.addEventListener('click', reset);
 hitBtn.addEventListener('click', hit);
 stayBtn.addEventListener('click', stay);
 playAgainBtn.addEventListener('click', function (e) {
@@ -137,6 +139,7 @@ function deal() {
     dealDealerCard();
     dealPlayerCard();
     dealDealerCard();
+    // ================== TO DO: LAST CARD DEALT TO DEALER NEED TO BE FACE DOWN AT FIRST =====================
     // one card for the dealer should be face down
     playerHandTotal = playerHand[0].value + playerHand[1].value;
     dealerHandTotal = dealerHand[0].value + dealerHand[1].value;
@@ -194,13 +197,15 @@ function compareForAce() {
         } else {
             dealerHasAce = false
         }
+        console.log(dealerHasAce);
     }
     for (let i = 0; i < playerHand.length; i++) {
         if (playerHand[i].value === 11) {
             playerHasAce = true;
         } else {
             playerHasAce = false
-        };
+        }
+        console.log(playerHasAce);
     }   
     if (playerHandTotal > 21 && playerHasAce === true) {
         playerHandTotal = playerHandTotal - 10;
@@ -246,6 +251,7 @@ function updateBalance() {
 }
 
 function render() {
+   console.log('dealer played: ', dealerPlayed);
     renderHands();
     renderBalance();
     renderMessage();
@@ -254,8 +260,13 @@ function render() {
 //======================= TO DO: RENDER CARDS TO HAND ================================
 function renderHands() {
     // removed element?
-    // let allCards = document.getElementsByClassName('card');
-    // allCards.playerHand.removeChildren(); 
+    // let cards = document.getElementsByClassName('card')
+    // playerHandEl.removeChild(cards); 
+    // playerCardDiv.remove();
+    // document.getElementsByClassName('player-hand').innerHTML = "";
+    // document.getElementsByClassName('dealer-hand').innerHTML = "";
+    playerHandEl.innerHTML = "";
+    dealerHandEl.innerHTML = "";
     for (let i = 0; i < playerHand.length; i++) {
         let playerCardDiv = document.createElement(`div`);
         playerHandEl.appendChild(playerCardDiv);
@@ -265,8 +276,15 @@ function renderHands() {
     for (let i = 0; i < dealerHand.length; i++) {
         let dealerCardDiv = document.createElement('div');
         dealerHandEl.appendChild(dealerCardDiv);
-        dealerCardDiv.className = `card ${dealerHand[i].face}`;
+        if(!stand && i === 1) {
+            dealerCardDiv.className = 'card back-blue';
+        } else {  
+            dealerCardDiv.className = `card ${dealerHand[i].face}`;
+        }
     }
+}
+function reset() {
+    init();
 }
     
 function renderBalance() {
@@ -292,32 +310,32 @@ function renderMessage () {
     } else if (playerHandTotal > 21) {
         console.log('you bust/lose');
         message.innerHTML = `Your Total Equals ${playerHandTotal}. You Bust. Sorry You Lose.`;
-        init();
+        // reset function
     } else if (stand === true && dealerHandTotal === playerHandTotal && dealerHandTotal >= 17) {
         console.log('push');
         message.innerHTML = `Both Player And Dealer Had ${playerHandTotal}. It's A Push`;
         updateBalance();
-        init();
+        // reset function
     } else if (playerHand.length === 2 && playerHandTotal === 21) {
         console.log('Blackjack!');
         message.innerHTML = 'Blackjack!';
         updateBalance();
-        init();
+        // reset function
     }  else if (stand === true && dealerHandTotal > playerHandTotal && dealerHandTotal >= 17 && dealerHandTotal <= 21) {
         console.log('dealer has higher total without busting or has blackjack, you lose');
         message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. Sorry, You Lose.`;
-        init();
+        // reset fucntion
         // player balance should be alread correct
     } else if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
         console.log('you win!'); 
         message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. You Win!`;
         updateBalance();
-        init();
+        // reset function
     } else if (dealerHandTotal > 21 && stand === true) {
         console.log('dealer bust, you win');
         message.innerHTML = `Player's Total Was ${playerHandTotal}. Dealer's Total Was ${dealerHandTotal}. Dealer Bust. You Win!`;
         updateBalance();  
-        init();
+        // reset function
     } 
 }
         
