@@ -62,8 +62,8 @@ const playAgainBtn = document.querySelector('#play-again');
 const betInput = document.querySelector('input');
 const message = document.querySelector('.messages');
 const balance = document.querySelector('.balance');
-const dealerHandEl = document.querySelector('.dealer-hand');
-const playerHandEl = document.querySelector('.player-hand');
+// const dealerHandEl = document.querySelector('.dealer-hand');
+// const playerHandEl = document.querySelector('.player-hand');
 
 
 
@@ -145,12 +145,12 @@ function shuffleDeck() {
 
 function deal() {
     if (dealt === true) return;
-    dealt = true;
     // udate playerBalance first and return if bet is too high
     if(playerBalance >= playerBet){
         playerBalance -= playerBet;
     } else return;
     if(playerBet === 0) return;
+    dealt = true;
     dealPlayerCard();
     dealDealerCard();
     dealPlayerCard();
@@ -238,6 +238,21 @@ function dealerPlay() {
     render();
 }
 
+function updateBalance() {
+    if (playerHand.length === 2 && playerHandTotal === 21) {
+        playerBalance += playerBet + playerBet * 1.5;
+        // for player blackjack
+    }
+    if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
+        playerBalance += playerBet * 2;
+        // for player total higher than dealers
+    }
+    if (stand === true && dealerHandTotal > 21) {
+        playerBalance += playerBet * 2;
+        // for dealer bust
+    }
+}
+
 function render() {
     // renderHands();
     renderBalance();
@@ -245,9 +260,13 @@ function render() {
 }
 
 // function renderHands() {
-    //     playerHandEl.appendChild();
-    //     dealerHandEl.appendChild();
-    // }
+//     for (let i = 2; i < playerHand.length; i++) {
+//         playerHandEl.appendChild(playerHand[i].face);
+//     }
+//     for (let i = 2; i < dealerHand.length; i++) {
+//         dealerHandEl.appendChild(playerHand[i].face);
+//     }
+// }
     
 function renderBalance() {
     balance.innerHTML = `Your Money Amount: $${playerBalance}`;
@@ -269,46 +288,35 @@ function renderMessage () {
         message.innerHTML = `Players Current Total Is ${playerHandTotal} And The Dealer Is Currently Showing ${dealerHand[0].value}`; // figure out how to calcuate for only the showing card
     } 
     if (playerHandTotal > 21) {
-        winner = true; // maybe should go in compare()
         console.log('you bust/lose');
         message.innerHTML = `Your Total Equals ${playerHandTotal}. You Bust. Sorry You Lose.`;
-        init();
-    }
-    if (playerHand.length === 2 && playerHandTotal === 21) {
-        winner = true; // maybe should go in compare()
-        playerBalance += playerBet + playerBet * 1.5; // maybe should go in compare()
-        console.log('Blackjack!');
-        message.innerHTML = 'Blackjack!';
-        init();
     }
     if (stand === true && dealerHandTotal === playerHandTotal && dealerHandTotal >= 17) {
-        winner = true; // maybe should go in compare()
         console.log('push');
         message.innerHTML = `Both Player And Dealer Had ${playerHandTotal}. It's A Push`;
-        init();       
+    }
+    if (playerHand.length === 2 && playerHandTotal === 21) {
+        console.log('Blackjack!');
+        message.innerHTML = 'Blackjack!';
+        updateBalance();
     }
     if (stand === true && dealerHandTotal > playerHandTotal && dealerHandTotal >= 17 && dealerHandTotal <= 21) {
-        winner = true; // maybe should go in compare()
         console.log('dealer has higher total without busting or has blackjack, you lose');
-        message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. Sorry, You Lose.`; 
-        init()
+        message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. Sorry, You Lose.`;
+        // player balance should be alread correct
     }
     if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
-        winner = true; // maybe should go in compare()
-        playerBalance += playerBet * 2; // maybe should go in compare()
         console.log('you win!'); 
         message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. You Win!`;
-        init();     
+        updateBalance();
     }
     if (stand === true && dealerHandTotal > 21) {
-        winner = true; // maybe should go in compare()
-        playerBalance += playerBet * 2; // maybe should go in compare()
         console.log('dealer bust, you win');
         message.innerHTML = 'Dealer Bust! You Win!';
-        init();
+        updateBalance();  
     }
     // need to figure how to account for true game over
-    if (playerBalance === 0) {
+    if (playerBalance === 0 && dealerPlayed === true) {
         renderPlayAgainBtn();
     }
 }
