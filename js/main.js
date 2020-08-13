@@ -144,6 +144,7 @@ function shuffleDeck() {
 }
 
 function deal() {
+    if (dealt === true) return;
     dealt = true;
     // udate playerBalance first and return if bet is too high
     if(playerBalance >= playerBet){
@@ -176,12 +177,12 @@ function hit() {
         dealPlayerCard();
     }
     getHandTotals();
+    render();
     // compareForAce();
 }
 
 function stay() {
     stand = true;
-    getHandTotals();
     dealerPlay();
 }
 
@@ -206,9 +207,7 @@ function getHandTotals () {
         playerHandTotal += playerHand[i].value;
     }
     console.log('players current total: ', playerHandTotal);
-    console.log('pplayer hand: ', playerHand);
-    console.log('players balance: ', playerBalance);
-    console.log('players bet: ', playerBet)
+    console.log('player hand: ', playerHand);
 
     dealerHandTotal = dealerHand[0].value + dealerHand[1].value;
     for (let i = 2; i < dealerHand.length; i++) {
@@ -219,14 +218,9 @@ function getHandTotals () {
 }   
 
 // function compareForAce() {
-//     // compares totals and adjusts for Aces
-//     if(dealerHandTotal === 21 || playerHandTotal === 21) {
-//         winner = true;
-//     }
-//     if (dealerPlayed === true) {
-//         winner === true;
-//     }
-//     render();
+//     // need to check for A in player/dealer hands  includes?
+//     // if ace is present and total is higher than 21 the Ace value needs to reset to 1
+
 // }
 
 function dealerPlay() {
@@ -239,12 +233,9 @@ function dealerPlay() {
         // compareForAce()
         if(dealerHandTotal > 21) {
             playerBalance += playerBet * 2;
-            console.log('dealer bust, you win');
-            render();
-            // invoke init here?
-            break;
         }
     }
+    render();
 }
 
 function render() {
@@ -273,10 +264,10 @@ function renderPlayAgainBtn() {
 }
         
 function renderMessage () {
-    if (winner === false && dealt === true) {
+    if (winner === false && dealt === true && dealerPlayed === false) {
         console.log('game in progress');
-        message.innerHTML = `Players Current Total Is ${playerHandTotal} And The Dealer Is Currently Showing ${dealerHandTotal}`; // figure out how to calcuate for only the showing card
-    }
+        message.innerHTML = `Players Current Total Is ${playerHandTotal} And The Dealer Is Currently Showing ${dealerHand[0].value}`; // figure out how to calcuate for only the showing card
+    } 
     if (playerHandTotal > 21) {
         winner = true; // maybe should go in compare()
         console.log('you bust/lose');
@@ -285,7 +276,7 @@ function renderMessage () {
     }
     if (playerHand.length === 2 && playerHandTotal === 21) {
         winner = true; // maybe should go in compare()
-        playerBalance += playerBet * 1.5; // maybe should go in compare()
+        playerBalance += playerBet + playerBet * 1.5; // maybe should go in compare()
         console.log('Blackjack!');
         message.innerHTML = 'Blackjack!';
         init();
