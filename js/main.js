@@ -66,7 +66,7 @@ const resetBtn = document.querySelector('#reset');
 
 betInput.addEventListener('input', function (e) {
     playerBet = parseInt(e.target.value);
-})
+});
 dealBtn.addEventListener('click', deal);
 resetBtn.addEventListener('click', reset);
 hitBtn.addEventListener('click', hit);
@@ -84,8 +84,8 @@ function init () {
     playerHandTotal = 0;
     dealerHandTotal = 0;
     playerBet = 0;
-    playerHasAce = false;
-    dealerHasAce = false;
+    playerHasAce = 0;
+    dealerHasAce = 0;
     dealerPlayed = false;
     dealt = false;
     stand = false;
@@ -182,23 +182,23 @@ function compareForAce() {
     // if ace is present and total is higher than 21 the Ace value needs to reset to 1
     for (let i = 0; i < dealerHand.length; i++) {
         if (dealerHand[i].value === 11) {
-            dealerHasAce = true;
-        } else {
-            dealerHasAce = false
-        }
+            dealerHasAce++;
+            console.log('ACE');
+        }  
     }
     for (let i = 0; i < playerHand.length; i++) {
         if (playerHand[i].value === 11) {
-            playerHasAce = true;
-        } else {
-            playerHasAce = false
-        }
+            playerHasAce++;
+            console.log('ACE');
+        } 
     }   
-    if (playerHandTotal > 21 && playerHasAce === true) {
-        playerHandTotal = playerHandTotal - 10;
+    if (playerHandTotal > 21 && playerHasAce > 0) {
+        let playerAceAdjustment = playerHasAce * 10;
+        playerHandTotal -= playerAceAdjustment;
     }
-    if (dealerHandTotal > 21 && dealerHasAce === true) {
-        dealerHandTotal = dealerHandTotal - 10;
+    if (dealerHandTotal > 21 && dealerHasAce > 0) {
+        let dealerAceAdjustment = dealerHasAce * 10
+        dealerHandTotal -= dealerAceAdjustment;
     }
 }
 
