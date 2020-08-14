@@ -45,6 +45,7 @@ let dealerPlayed;
 let stand;
 let winner;
 let dealt;
+let playerBust;
 
 
 /*----- cached element references -----*/
@@ -84,8 +85,7 @@ function init () {
     playerHandTotal = 0;
     dealerHandTotal = 0;
     playerBet = 0;
-    playerHasAce = 0;
-    dealerHasAce = 0;
+    playerBust = false;
     dealerPlayed = false;
     dealt = false;
     stand = false;
@@ -137,8 +137,8 @@ function deal() {
     dealDealerCard();
     dealPlayerCard();
     dealDealerCard();
-    playerHandTotal = playerHand[0].value + playerHand[1].value;
-    dealerHandTotal = dealerHand[0].value + dealerHand[1].value;
+    playerHandTotal = getScore(playerHand); //playerHand[0].value + playerHand[1].value;
+    dealerHandTotal = getScore(dealerHand); //dealerHand[0].value + dealerHand[1].value;
     message.innerHTML = '';
     render();
 }
@@ -152,10 +152,14 @@ function dealDealerCard() {
 }
 
 function hit() {
+    if (playerHandTotal > 21) {
+        playerBust = true;
+    }
     if(playerHandTotal <= 21) {
         dealPlayerCard();
     }
-    getHandTotals();
+    playerHandTotal = getScore(playerHand);
+    dealerHandTotal = getScore(dealerHand);
     render();
 }
 
@@ -164,50 +168,32 @@ function stay() {
     dealerPlay();
 }
 
-function getHandTotals () {
-    playerHandTotal = 0;
-    dealerHandTotal = 0;
-    for (let i = 0; i < playerHand.length; i++) {
-        playerHandTotal += playerHand[i].value;
+function getScore(hand) {
+    let aces = 0;
+    let score = 0;
+    for (let i = 0; i < hand.length; i++) {
+        score += hand[i].value;
+        if (hand[i].value === 11) {
+            aces++;
+        }
     }
-    for (let i = 0; i < dealerHand.length; i++) {
-        dealerHandTotal += dealerHand[i].value;
+    while (score > 21 && aces){
+        score -= 10;
+        aces -= 1;
     }
-    compareForAce();
-}   
-
-function compareForAce() {
-    // ========================== TO DO: NOT WORKING YET ======================
-    // need to check for A in player/dealer hands -- try includes? --
-    // if ace is present and total is higher than 21 the Ace value needs to reset to 1
-    for (let i = 0; i < dealerHand.length; i++) {
-        if (dealerHand[i].value === 11) {
-            dealerHasAce++;
-            console.log('ACE');
-        }  
-    }
-    for (let i = 0; i < playerHand.length; i++) {
-        if (playerHand[i].value === 11) {
-            playerHasAce++;
-            console.log('ACE');
-        } 
-    }   
-    if (playerHandTotal > 21 && playerHasAce > 0) {
-        let playerAceAdjustment = playerHasAce * 10;
-        playerHandTotal -= playerAceAdjustment;
-    }
-    if (dealerHandTotal > 21 && dealerHasAce > 0) {
-        let dealerAceAdjustment = dealerHasAce * 10
-        dealerHandTotal -= dealerAceAdjustment;
-    }
+    return score;
 }
+
+
 
 function dealerPlay() {
     dealerPlayed = true;
     while (dealerHandTotal <= 17) {
         dealDealerCard();
-        getHandTotals();
+        dealerHandTotal = getScore(dealerHand);
     }
+    dealerHandTotal = getScore(dealerHand);
+    playerHandTotal = getScore(playerHand);
     render();
 }
 
@@ -282,7 +268,9 @@ function renderPlayAgainBtn() {
 function renderMessage () {
     if (playerBalance === 0 && dealerPlayed === true) {
         renderPlayAgainBtn();
-    }else if (dealt === true && dealerPlayed === false && playerHandTotal < 21) {
+    } else if (playerBalance === 0 && playerBust === true) {
+        renderPlayAgainBtn();
+    } else if (dealt === true && dealerPlayed === false && playerHandTotal < 21) {
         message.innerHTML = `Players Current Total Is ${playerHandTotal} And The Dealer Is Currently Showing ${dealerHand[0].value}`;
     } else if (playerHandTotal > 21) {
         message.innerHTML = `Your Total Equals ${playerHandTotal}. You Bust. Sorry You Lose.`;
