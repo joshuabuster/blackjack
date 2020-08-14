@@ -1,12 +1,11 @@
 # Blackjack
 
-Blackjack card game - a game of wit and chance
+Blackjack - a game of wit and chance
 
 # Screenshots:
 
 ![opening game board](imgs/opening-board.png)
 ![mid-game](imgs/mid-game.png)
-![end of round](img/end-of-round.png)
 
 # Technologies Used:
 
@@ -16,7 +15,7 @@ Blackjack card game - a game of wit and chance
 
 # Getting Started:
 
-[link to game here]   dont have it yet
+[link to game here](https://github.com/joshuabuster/blackjack.git)
 
 Basic Rules :
 * The goal of blackjack is to beat the dealer's hand without going over 21.
