@@ -4,6 +4,7 @@ Blackjack - a game of wit and chance
 
 # Screenshots:
 
+![wireframe](imgs/wireframe.jpeg)
 ![opening game board](imgs/opening-board.png)
 ![mid-game](imgs/mid-game.png)
 
