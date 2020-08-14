@@ -4,9 +4,9 @@ Blackjack card game - a game of wit and chance
 
 # Screenshots:
 
-![opening game board](imgs/filename opening-board.png)
-![mid-game](imgs/filename mid-game.png)
-![end of round](img/filename end-of-round.png)
+![opening game board](imgs/filename%20opening-board.png)
+![mid-game](imgs/filename%20mid-game.png)
+![end of round](img/filename%20end-of-round.png)
 
 # Technologies Used:
 
