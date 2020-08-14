@@ -15,7 +15,7 @@ Blackjack - a game of wit and chance
 
 # Getting Started:
 
-[link to game here](https://github.com/joshuabuster/blackjack.git)
+[link to game here](https://joshuabuster.github.io/blackjack/)  
 
 Basic Rules :
 * The goal of blackjack is to beat the dealer's hand without going over 21.
