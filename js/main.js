@@ -152,14 +152,14 @@ function dealDealerCard() {
 }
 
 function hit() {
-    if (playerHandTotal > 21) {
-        playerBust = true;
-    }
     if(playerHandTotal <= 21) {
         dealPlayerCard();
     }
     playerHandTotal = getScore(playerHand);
     dealerHandTotal = getScore(dealerHand);
+    if (playerHandTotal > 21) {
+        playerBust = true;
+    }
     render();
 }
 

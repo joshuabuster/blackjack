@@ -71,6 +71,10 @@ button:hover {
     background-color: steelblue;
 }
 
+.lower-row {
+    text-align: center;
+}
+
 .messages {
     text-align: center;
     font-size: 35px;
