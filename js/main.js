@@ -277,7 +277,7 @@ function renderMessage () {
     } else if (stand === true && dealerHandTotal === playerHandTotal && dealerHandTotal >= 17) {
         message.innerHTML = `Both Player And Dealer Had ${playerHandTotal}. It's A Push`;
     } else if (playerHand.length === 2 && playerHandTotal === 21) {
-        message.innerHTML = 'Blackjack!';
+        message.innerHTML = 'Winner Winner Chicken Dinner!';
     }  else if (stand === true && dealerHandTotal > playerHandTotal && dealerHandTotal >= 17 && dealerHandTotal <= 21) {
         message.innerHTML = `Player's Total Was ${playerHandTotal} And The Dealer's Total Was ${dealerHandTotal}. Sorry, You Lose.`;
     } else if (stand === true && dealerPlayed === true && playerHandTotal > dealerHandTotal) {
